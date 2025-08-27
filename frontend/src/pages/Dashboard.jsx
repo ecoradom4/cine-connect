@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+
 const API = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
 
 export default function Dashboard(){
   const [user, setUser] = useState(null)
+  const navigate = useNavigate()
+
   useEffect(()=>{
     const token = localStorage.getItem('cine_token')
     if (!token) return
@@ -11,10 +15,28 @@ export default function Dashboard(){
       .then(r=>setUser(r.data.user))
       .catch(()=>{})
   },[])
+
+  const handleLogout = () => {
+    localStorage.removeItem('cine_token')
+    navigate('/login')  // redirige al login
+  }
+
   return (
     <div style={{padding:20}}>
       <h2>Dashboard</h2>
-      {user ? <div>Welcome, {user.name || user.email}</div> : <div>Not logged in</div>}
+      {user ? (
+        <div>
+          <div>Welcome, {user.name || user.email}</div>
+          <button 
+            onClick={handleLogout} 
+            style={{marginTop: 20, padding: '10px 20px', background: 'red', color: 'white', border: 'none', borderRadius: 5}}
+          >
+            Cerrar sesión
+          </button>
+        </div>
+      ) : (
+        <div>Not logged in</div>
+      )}
     </div>
   )
 }
