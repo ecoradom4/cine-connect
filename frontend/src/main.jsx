@@ -10,20 +10,15 @@ function PrivateRoute({ children }) {
   return token ? children : <Navigate to="/" replace />
 }
 
-function App(){
+function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Login/>} />
-        <Route 
-          path='/dashboard' 
-          element={
-            <PrivateRoute>
-              <Dashboard/>
-            </PrivateRoute>
-          } 
-        />
+        <Route path='/login' element={<Login />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/' element={<Navigate to="/login" />} />
       </Routes>
+
     </BrowserRouter>
   )
 }
